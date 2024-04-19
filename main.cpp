@@ -5,34 +5,30 @@
 
 using namespace std::chrono_literals;
 
-int f(int x, std::optional<int> &res) {
+int f(int x) {
 
     if (x < 1) {
-        res = 0;
-        return res.value();
+        return 0;
     }
     if (x < 10) {
-        res = x;
-        return res.value();
+        return x;
     }
     while (true) {
-        std::this_thread::sleep_for(0s);
+        std::this_thread::sleep_for(10s);
     }
 }
 
 
-int g(int x, std::optional<int> &res) {
+int g(int x) {
 
     if (x > 5) {
-        res = 0;
-        return res.value();
+        return 0;
     }
     if (x == 1) {
-        res = x;
-        return res.value();
+        return x;
     }
     while (true) {
-        std::this_thread::sleep_for(0s);
+        std::this_thread::sleep_for(10s);
     }
 }
 
@@ -51,7 +47,7 @@ std::optional<int> calculation(std::optional<int> f_res, std::optional<int> g_re
     if (f_res && f_res.value()) {
         return f_res.value();
     }
-    if (g_res) {
+    if (g_res && g_res.value()) {
         return g_res.value();
     }
     return {};
@@ -96,8 +92,8 @@ int main() {
     int x{input_x()};
 
     std::optional<int> f_res{}, g_res{};
-    std::thread f_thread{f, x, std::ref(f_res)};
-    std::thread g_thread{g, x, std::ref(g_res)};
+    std::thread f_thread{[&]{f_res = f(x);}};
+    std::thread g_thread{[&]{g_res = g(x);}};
 
     bool continue_without_asking{false};
     bool running{true};
