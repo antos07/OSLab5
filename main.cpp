@@ -6,7 +6,6 @@
 using namespace std::chrono_literals;
 
 int f(int x) {
-
     if (x < 1) {
         return 0;
     }
@@ -20,7 +19,6 @@ int f(int x) {
 
 
 int g(int x) {
-
     if (x > 5) {
         return 0;
     }
@@ -49,6 +47,9 @@ std::optional<int> calculation(std::optional<int> f_res, std::optional<int> g_re
     }
     if (g_res && g_res.value()) {
         return g_res.value();
+    }
+    if (f_res && g_res) {
+        return 0;
     }
     return {};
 }
